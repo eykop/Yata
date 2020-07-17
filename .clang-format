@@ -1,0 +1,10 @@
+BasedOnStyle: LLVM
+IndentWidth: 4
+AllowShortFunctionsOnASingleLine: None
+ColumnLimit: 120
+FixNamespaceComments: true
+NamespaceIndentation: All
+Standard: Cpp11
+PointerAlignment: Left
+AccessModifierOffset: -4
+IndentCaseLabels: true

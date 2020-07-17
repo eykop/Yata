@@ -1,0 +1,17 @@
+(A) Call Mom @Phone +Family
+(A) Schedule annual checkup +Health
+(B) Outline chapter 5 +Test +Novel @Computer @Course
+(C) Add cover sheets @Office +TPSReports
+Plan backyard herb garden @Home
+Pick up milk @GroceryStore
+Research self-publishing services +Novel @Computer
+x Download Todo.txt mobile app @Phone
+xylophone lesson
+X 2012-01-01 Make resolutions
+(A) x Find ticket prices
+x 2011-03-03 Call Mom
+x 2011-03-03 2011-03-03 Call Mom@Office +TPSReports 
+x (A) 2011-03-03 2011-03-03 Call Mom@Office +TPSReports 
+x (A) 2011-04-03 2011-03-03 Call Mom@Office +TPSReports 
+
+(x)? ?(\([A-Z]{1}\) )?([a-zA-Z\ \.\-0-9]+)(\@[A-Za-z]+)? ?(\+[A-Za-z]+)?
