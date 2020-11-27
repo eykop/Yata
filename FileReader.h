@@ -8,11 +8,11 @@
 class FileReader : public QObject {
     Q_OBJECT
 public:
-    explicit FileReader(QObject* parent = nullptr);
+    explicit FileReader(const std::string& filePath, QObject* parent = nullptr);
     virtual ~FileReader() {
         close();
     };
-    void setPath(std::string filePath);
+    bool init();
     std::string next();
     [[nodiscard]] bool end() const;
 

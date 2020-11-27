@@ -8,7 +8,9 @@
 #include <string>
 
 class Task : public QObject {
+
     Q_OBJECT
+
 public:
     enum Section {
         STATUS = Qt::UserRole + 1,

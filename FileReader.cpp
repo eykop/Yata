@@ -2,11 +2,14 @@
 
 #include <iostream>
 
-FileReader::FileReader(QObject* parent) : QObject(parent) {
+FileReader::FileReader(const std::string& filePath, QObject* parent) : QObject(parent), m_filePath{filePath} {
 }
 
-void FileReader::setPath(std::string filePath) {
-    m_filePath = filePath;
+bool FileReader::init() {
+    if (!m_inputFile.is_open()) {
+        m_inputFile.open(m_filePath, std::ifstream::in);
+    }
+    return m_inputFile.is_open();
 }
 
 std::string FileReader::next() {

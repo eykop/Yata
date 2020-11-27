@@ -1,3 +1,4 @@
+#include <QApplication>
 #include <QDebug>
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
@@ -8,10 +9,30 @@
 #include "Task.h"
 #include "TasksListModel.h"
 
+#include <QCommandLineParser>
+#include <QFileInfo>
+#include <QSystemTrayIcon>
+
 int main(int argc, char* argv[]) {
+
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 
-    QGuiApplication app(argc, argv);
+    QApplication app(argc, argv);
+
+    QCommandLineParser parser;
+    parser.setApplicationDescription("Yet Another ToDo Application");
+    parser.addHelpOption();
+    parser.addVersionOption();
+    parser.addPositionalArgument("input", QCoreApplication::translate("main", "Todo List full input file path."));
+    parser.process(app);
+
+    const QStringList args = parser.positionalArguments();
+    const QFileInfo input{args.at(0)};
+    if (!input.exists()) {
+        qDebug() << "inpupt file does not exist.";
+        parser.showHelp(1);
+    }
+
     qmlRegisterType<TasksListModel>("com.eykop.Yata", 1, 0, "TasksListModel");
 
     QQmlApplicationEngine engine;
@@ -25,17 +46,18 @@ int main(int argc, char* argv[]) {
         Qt::QueuedConnection);
 
     TasksListModel* tasksListModel = new TasksListModel(&app);
-    FileReader fr;
-    fr.setPath("/home/eyekop/Yata/test_data/todo.txt");
-    fr.next();
-    while (!fr.end()) {
+    FileReader fr{input.absoluteFilePath().toStdString()};
+    while (fr.init() && !fr.end()) {
         const std::string line = fr.next();
         const auto task = new Task(line, tasksListModel);
         tasksListModel->pushBack(task);
     }
     engine.rootContext()->setContextProperty("tasksListModel", tasksListModel);
-
     engine.load(url);
-    qDebug() << "isSystemTrayAvailable: " << QSystemTrayIcon::isSystemTrayAvailable();
+
+    QSystemTrayIcon* trayIcon = new QSystemTrayIcon(engine.rootObjects().at(0));
+    trayIcon->setIcon(QIcon(":/todo.png"));
+    trayIcon->show();
+
     return app.exec();
 }

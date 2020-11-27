@@ -13,16 +13,9 @@ Item {
     signal rowClicked(int row);
 
     function fillColumns() {
-        while(table.columnCount > 0){
-            var col = table.getColumn(0);
-            table.removeColumn(0);
-        }
-
-        console.log("in fillColumns, ", table.model.columnCount());
         for(var i=0; i<table.model.columnCount(); i++)
         {
             var role = tasksListModel.headerData(i, Qt.Horizontal)
-            console.log("add column: ", role);
             table.addColumn(columnComponent.createObject(table, { "role": role, "title": role}));
         }
 
