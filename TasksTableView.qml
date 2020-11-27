@@ -110,7 +110,6 @@ Item {
                 onTriggered: {
                     table.selection.forEach(
                                 function(rowIndex) {
-                                    dataBaseHelper.deleteDocumentRow(rowIndex);
                                     table.selection.deselect(rowIndex);
                                 }
                                 )
@@ -121,7 +120,6 @@ Item {
                 onTriggered: {
                     table.selection.forEach(
                                 function(rowIndex) {
-                                    dataBaseHelper.exportDocument(model.documentIdAtIndex(rowIndex), "/home/eyekop/projects/exported")
                                     table.selection.deselect(rowIndex);
                                 }
                                 )
@@ -135,7 +133,6 @@ Item {
         }
 
         Component.onCompleted: {
-            console.log("on table completed...");
             fillColumns();
         }
 
