@@ -13,18 +13,19 @@ bool FileReader::init() {
 }
 
 std::string FileReader::next() {
-    std::string taskLine;
     if (!m_inputFile.is_open()) {
         m_inputFile.open(m_filePath, std::ifstream::in);
-        if (m_inputFile.is_open()) {
+        if (!m_inputFile.is_open()) {
             // log error can"t open file for reading.
-            return taskLine;
+            return {};
         }
     }
 
     if (end()) {
         throw std::out_of_range("reached end of file!");
     }
+
+    std::string taskLine;
     std::getline(m_inputFile, taskLine);
     return taskLine;
 }

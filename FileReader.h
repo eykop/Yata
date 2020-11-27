@@ -12,8 +12,8 @@ public:
     virtual ~FileReader() {
         close();
     };
-    bool init();
-    std::string next();
+    [[nodiscard]] bool init();
+    [[nodiscard]] std::string next();
     [[nodiscard]] bool end() const;
 
 signals:

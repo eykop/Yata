@@ -1,7 +1,6 @@
 #pragma once
 #include "Task.h"
 
-#include <QAbstractListModel>
 #include <QAbstractTableModel>
 
 class FileReader;
