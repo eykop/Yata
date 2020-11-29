@@ -5,6 +5,8 @@
 #include "FileReader.h"
 #include "Task.h"
 #include "TasksListModel.h"
+#include "utils/XmlParser.h"
+#include "utils/XmlSection.h"
 
 #include <QApplication>
 #include <QCommandLineParser>
@@ -15,6 +17,8 @@
 #include <QQmlContext>
 #include <QQuickStyle>
 #include <QSystemTrayIcon>
+
+#include <algorithm>
 
 void defineCmdLineArgs(const QApplication& app, QCommandLineParser& parser);
 std::string getTodoInputFilePathArg(QCommandLineParser& parser);
@@ -31,6 +35,7 @@ int main(int argc, char* argv[]) {
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));
+
     QObject::connect(
         &engine, &QQmlApplicationEngine::objectCreated, &app,
         [url](QObject* obj, const QUrl& objUrl) {
@@ -39,19 +44,29 @@ int main(int argc, char* argv[]) {
         },
         Qt::QueuedConnection);
 
-    TasksListModel* tasksListModel = parseTodoInputFile(getTodoInputFilePathArg(cmdParser));
-    tasksListModel->setParent(&app);
+    XmlParser parser;
+    QObject::connect(&parser, &XmlParser::loaded,
+                     [&parser, &cmdParser, &app, &engine, &url](XmlParser::LoadingResult result) {
+                         if (result == XmlParser::LoadingResult::FAILED) {
+                             qDebug() << "failed to load rules from xml";
+                             return;
+                         }
+
+                         // build regexp and set in task
+                         const auto& sections = parser.xmlSections();
+                         QString fullRegex;
+                         std::for_each(sections.cbegin(), sections.cend(),
+                                       [&fullRegex](const XmlSection& section) { fullRegex.append(section.Regexp); });
+                         Task::setRegexp(fullRegex.toStdString());
+
+                         TasksListModel* tasksListModel = parseTodoInputFile(getTodoInputFilePathArg(cmdParser));
+                         tasksListModel->setParent(&app);
+                         engine.rootContext()->setContextProperty(QStringLiteral("tasksListModel"), tasksListModel);
+                         engine.load(url);
+                     });
 
     qmlRegisterType<TasksListModel>("com.eykop.Yata", 1, 0, "TasksListModel");
-    engine.rootContext()->setContextProperty(QStringLiteral("tasksListModel"), tasksListModel);
-    engine.load(url);
-
-#ifdef Q_OS_LINUX
-    Notify::init("Hello world!");
-    Notify::Notification Hello("Hello world", "This is an example notification.", "dialog-information");
-    Hello.show();
-#endif
-
+    parser.init();
     return app.exec();
 }
 

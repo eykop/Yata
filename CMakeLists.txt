@@ -8,7 +8,7 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # QtCreator supports the following variables for Android, which are identical to qmake Android variables.
@@ -24,7 +24,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    endif()
 #endif()
 
-find_package(Qt5 COMPONENTS Core Quick Widgets QuickControls2 REQUIRED)
+find_package(Qt5 COMPONENTS Core Quick Widgets Xml QuickControls2 REQUIRED)
 
 if(ANDROID)
     add_library(Yata SHARED
@@ -40,6 +40,9 @@ else()
         Task.cpp
         FileReader.h
         FileReader.cpp
+        utils/XmlSection.h
+        utils/XmlParser.h
+        utils/XmlParser.cpp
         qml.qrc
         )
 endif()
@@ -56,7 +59,11 @@ if(UNIX AND NOT APPLE)
     target_link_libraries(Yata PRIVATE  ${GTKMM_LIBRARIES} notifymm-1.0)
 endif()
 
+configure_file(data.xml ${CMAKE_CURRENT_BINARY_DIR}/data.xml COPYONLY)
+configure_file(schema.xsd ${CMAKE_CURRENT_BINARY_DIR}/schema.xsd COPYONLY)
+
+
 target_compile_definitions(Yata
     PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(Yata
-    PRIVATE Qt5::Core Qt5::Quick Qt5::Widgets Qt5::QuickControls2)
+    PRIVATE Qt5::Core Qt5::Quick Qt5::Widgets Qt5::QuickControls2 Qt5::Xml)

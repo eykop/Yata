@@ -5,5 +5,7 @@
         <file>todo.png</file>
         <file>AppWindow.qml</file>
         <file>ListViewWindow.qml</file>
+        <file>data.xml</file>
+        <file>schema.xsd</file>
     </qresource>
 </RCC>

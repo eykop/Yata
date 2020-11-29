@@ -8,6 +8,8 @@ TasksListModel::TasksListModel(QObject* parent) : QAbstractTableModel(parent) {
     m_roleNames[Task::Section::DESCRIPTION] = "Description";
     m_roleNames[Task::Section::CREATION_DATE] = "Created";
     m_roleNames[Task::Section::COMPLETION_DATE] = "Completed";
+    m_roleNames[Task::Section::DUE] = "Due";
+    m_roleNames[Task::Section::RECURING] = "Recuring";
 }
 
 QVariant TasksListModel::headerData(int section, Qt::Orientation orientation, int role) const {

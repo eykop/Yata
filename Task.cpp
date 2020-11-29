@@ -1,14 +1,13 @@
 #include "Task.h"
 
-#include <iostream>
+#include <QDateTime>
+#include <QDebug>
+
 #include <regex>
 
-const std::string Task::m_taskRegex = "(x)? ?(\\([A-Z]{1}\\) )?([0-9]{4}\\-[0-9]{2}\\-[0-9]{2} "
-                                      ")?([0-9]{4}\\-[0-9]{2}\\-[0-9]{2} )?([a-zA-Z\\ "
-                                      "\\.\\-0-9]+)(\\@[A-Za-z]+)? "
-                                      "?(\\+[A-Za-z]+)?";
+std::string Task::m_taskRegex = "";
 
-Task::Task(const std::string& task, QObject* parent) : QObject(parent), m_line(task) {
+Task::Task(const std::string& task, QObject* parent) : QObject(parent), m_line(task), m_id{QUuid::createUuid()} {
     parse();
 }
 
@@ -20,12 +19,19 @@ void Task::parse() {
 
     if (std::regex_search(m_line, matches, self_regex)) {
         for (std::size_t i = 1; i < matches.size(); ++i) {
-            m_sections[static_cast<Section>(static_cast<int>(Section::STATUS) + static_cast<int>(i) - 1)] =
-                QString::fromStdString(matches[i].str()).trimmed();
+            const auto match = matches[i].str();
+            if (static_cast<int>(Section::DUE) > static_cast<int>(i)) {
+                m_sections[static_cast<Section>(static_cast<int>(Section::STATUS) + static_cast<int>(i) - 1)] =
+                    QString::fromStdString(match).trimmed();
+            }
         }
     }
 }
 
 QString Task::get(Section section) const {
     return m_sections[section];
+}
+
+void Task::setRegexp(const std::string& regexp) {
+    m_taskRegex = regexp;
 }

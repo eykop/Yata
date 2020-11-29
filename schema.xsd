@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="name" type="xs:string"/>
+  <xs:element name="regexp" type="xs:string"/>
+  <xs:element name="index" type="xs:byte"/>
+  <xs:element name="section">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="name"/>
+        <xs:element ref="regexp"/>
+        <xs:element ref="index"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="short_section">
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute type="xs:string" name="name"/>
+          <xs:attribute type="xs:string" name="regexp"/>
+          <xs:attribute type="xs:byte" name="index"/>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="main">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="short_section"/>
+        <xs:element ref="section"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="extra">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="short_section"/>
+        <xs:element ref="section"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="setions">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="main"/>
+        <xs:element ref="extra"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="root">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="setions"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
