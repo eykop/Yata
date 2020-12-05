@@ -24,27 +24,39 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #    endif()
 #endif()
 
-find_package(Qt5 COMPONENTS Core Quick Widgets REQUIRED)
+find_package(Qt5 COMPONENTS Core Quick Widgets QuickControls2 REQUIRED)
 
 if(ANDROID)
     add_library(Yata SHARED
-      main.cpp
-      qml.qrc
-    )
+        main.cpp
+        qml.qrc
+        )
 else()
     add_executable(Yata
-      main.cpp
-      TasksListModel.h
-      TasksListModel.cpp
-      Task.h
-      Task.cpp
-      FileReader.h
-      FileReader.cpp
-      qml.qrc
-    )
+        main.cpp
+        TasksListModel.h
+        TasksListModel.cpp
+        Task.h
+        Task.cpp
+        FileReader.h
+        FileReader.cpp
+        qml.qrc
+        )
+endif()
+
+
+if(UNIX AND NOT APPLE)
+    find_package(PkgConfig REQUIRED)
+    # sudo dnf install gtkmm24 gtkmm24-devel
+    pkg_check_modules(GTKMM gtkmm-2.4)
+    # sudo dnf install libnotifymm libnotifymm-devel
+    target_include_directories(Yata SYSTEM PRIVATE /usr/include/libnotifymm-1.0/)
+    target_include_directories(Yata SYSTEM PRIVATE ${GTKMM_INCLUDE_DIRS})
+    target_link_directories(Yata PRIVATE ${GTKMM_LIBRARY_DIRS})
+    target_link_libraries(Yata PRIVATE  ${GTKMM_LIBRARIES} notifymm-1.0)
 endif()
 
 target_compile_definitions(Yata
-  PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
+    PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(Yata
-  PRIVATE Qt5::Core Qt5::Quick Qt5::Widgets)
+    PRIVATE Qt5::Core Qt5::Quick Qt5::Widgets Qt5::QuickControls2)

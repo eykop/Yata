@@ -1,8 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>qtquickcontrols2.conf</file>
         <file>TasksTableView.qml</file>
         <file>todo.png</file>
+        <file>AppWindow.qml</file>
     </qresource>
 </RCC>
