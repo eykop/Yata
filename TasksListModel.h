@@ -26,9 +26,9 @@ private:
 
     // QAbstractItemModel interface
 public:
-    QHash<int, QByteArray> roleNames() const;
+    QHash<int, QByteArray> roleNames() const override;
 
     // QAbstractItemModel interface
 public:
-    int columnCount(const QModelIndex& parent) const;
+    int columnCount(const QModelIndex& parent) const override;
 };

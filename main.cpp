@@ -1,3 +1,11 @@
+#ifdef Q_OS_LINUX
+ #include <libnotifymm.h>
+#endif
+
+#include "FileReader.h"
+#include "Task.h"
+#include "TasksListModel.h"
+
 #include <QApplication>
 #include <QCommandLineParser>
 #include <QDebug>
@@ -5,11 +13,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include <QQuickStyle>
 #include <QSystemTrayIcon>
-
-#include "FileReader.h"
-#include "Task.h"
-#include "TasksListModel.h"
 
 void defineCmdLineArgs(const QApplication& app, QCommandLineParser& parser);
 std::string getTodoInputFilePathArg(QCommandLineParser& parser);
@@ -19,13 +24,10 @@ int main(int argc, char* argv[]) {
 
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
-
+    QQuickStyle::setStyle("Material");
     QCommandLineParser cmdParser;
     defineCmdLineArgs(app, cmdParser);
-
-    QSystemTrayIcon* trayIcon = new QSystemTrayIcon(&app);
-    trayIcon->setIcon(QIcon(QStringLiteral(":/todo.png")));
-    trayIcon->show();
+    app.setQuitOnLastWindowClosed(false);
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));
@@ -44,6 +46,12 @@ int main(int argc, char* argv[]) {
     engine.rootContext()->setContextProperty(QStringLiteral("tasksListModel"), tasksListModel);
     engine.load(url);
 
+#ifdef Q_OS_LINUX
+    Notify::init("Hello world!");
+    Notify::Notification Hello("Hello world", "This is an example notification.", "dialog-information");
+    Hello.show();
+#endif
+
     return app.exec();
 }
 
@@ -58,6 +66,11 @@ void defineCmdLineArgs(const QApplication& app, QCommandLineParser& parser) {
 
 std::string getTodoInputFilePathArg(QCommandLineParser& parser) {
     const QStringList args = parser.positionalArguments();
+    if(args.empty())
+    {
+        qDebug() << "inpupt file was not provided.";
+        return {};
+    }
     const QFileInfo input{args.at(0)};
     if (!input.exists()) {
         qDebug() << "inpupt file does not exist.";
