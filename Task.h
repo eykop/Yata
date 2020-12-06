@@ -4,6 +4,7 @@
 #include <QHash>
 #include <QObject>
 #include <QString>
+#include <QUuid>
 
 #include <string>
 
@@ -19,19 +20,23 @@ public:
         CREATION_DATE,
         DESCRIPTION,
         PROJECTS,
-        CONTEXTS
+        CONTEXTS,
+        DUE,
+        RECURING
     };
     Q_ENUM(Section)
 
     explicit Task(const std::string& task, QObject* parent = nullptr);
     QString get(Section section) const;
 
-signals:
+    static void setRegexp(const std::string& regexp);
+
 private:
     void parse();
 
 private:
     std::string m_line;
     QHash<Section, QString> m_sections;
-    static const std::string m_taskRegex;
+    QUuid m_id;
+    static std::string m_taskRegex;
 };
