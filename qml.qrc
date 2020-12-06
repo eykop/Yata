@@ -4,5 +4,6 @@
         <file>TasksTableView.qml</file>
         <file>todo.png</file>
         <file>AppWindow.qml</file>
+        <file>ListViewWindow.qml</file>
     </qresource>
 </RCC>

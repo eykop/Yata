@@ -1,10 +1,9 @@
+
+#include <libnotifymm.h>
+
 #include "FileReader.h"
 #include "Task.h"
 #include "TasksListModel.h"
-
-#ifdef Q_OS_LINUX
-#include <libnotifymm.h>
-#endif
 
 #include <QApplication>
 #include <QCommandLineParser>
@@ -27,6 +26,7 @@ int main(int argc, char* argv[]) {
     QQuickStyle::setStyle("Material");
     QCommandLineParser cmdParser;
     defineCmdLineArgs(app, cmdParser);
+    app.setQuitOnLastWindowClosed(false);
 
     QQmlApplicationEngine engine;
     const QUrl url(QStringLiteral("qrc:/main.qml"));

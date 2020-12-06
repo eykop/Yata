@@ -28,14 +28,17 @@ SystemTrayIcon {
         }
     }
 
+
+
     onActivated: {
         if (reason == SystemTrayIcon.Trigger) {
-            var component = Qt.createComponent("AppWindow.qml");
+            var component = Qt.createComponent("ListViewWindow.qml");
             var win = component.createObject(tray, {trayX: tray.geometry.x, trayY: tray.geometry.y});
             win.show();
             win.raise();
             win.requestActivate();
         }
+
 
     }
 
