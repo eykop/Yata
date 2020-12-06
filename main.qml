@@ -7,11 +7,12 @@ import Qt.labs.platform 1.1
 SystemTrayIcon {
 
     id: tray
+
     Material.theme: Material.Dark
     Material.accent: Material.Purple
+
     icon.source: "qrc:/todo.png"
     visible: true
-
 
     menu: Menu {
         MenuItem {
@@ -28,8 +29,6 @@ SystemTrayIcon {
         }
     }
 
-
-
     onActivated: {
         if (reason == SystemTrayIcon.Trigger) {
             var component = Qt.createComponent("ListViewWindow.qml");
@@ -38,8 +37,6 @@ SystemTrayIcon {
             win.raise();
             win.requestActivate();
         }
-
-
     }
 
     Component.onCompleted: showMessage("Message title", "Something important came up. Click this to know more.")

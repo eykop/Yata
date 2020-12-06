@@ -1,5 +1,6 @@
-
-#include <libnotifymm.h>
+#ifdef Q_OS_LINUX
+ #include <libnotifymm.h>
+#endif
 
 #include "FileReader.h"
 #include "Task.h"
@@ -65,6 +66,11 @@ void defineCmdLineArgs(const QApplication& app, QCommandLineParser& parser) {
 
 std::string getTodoInputFilePathArg(QCommandLineParser& parser) {
     const QStringList args = parser.positionalArguments();
+    if(args.empty())
+    {
+        qDebug() << "inpupt file was not provided.";
+        return {};
+    }
     const QFileInfo input{args.at(0)};
     if (!input.exists()) {
         qDebug() << "inpupt file does not exist.";
