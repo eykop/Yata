@@ -11,7 +11,7 @@ SystemTrayIcon {
     Material.theme: Material.Dark
     Material.accent: Material.Purple
 
-    icon.source: "qrc:/todo.png"
+    icon.source: "qrc:/../data/todo.png"
     visible: true
 
     menu: Menu {

@@ -28,22 +28,22 @@ find_package(Qt5 COMPONENTS Core Quick Widgets Xml QuickControls2 REQUIRED)
 
 if(ANDROID)
     add_library(Yata SHARED
-        main.cpp
-        qml.qrc
+            src/main.cpp
+            src/qml.qrc
         )
 else()
     add_executable(Yata
-        main.cpp
-        TasksListModel.h
-        TasksListModel.cpp
-        Task.h
-        Task.cpp
-        FileReader.h
-        FileReader.cpp
-        utils/XmlSection.h
-        utils/XmlParser.h
-        utils/XmlParser.cpp
-        qml.qrc
+            src/main.cpp
+            src/models/TasksListModel.h
+            src/models/TasksListModel.cpp
+            src/models/Task.h
+            src/models/Task.cpp
+            src/utils/FileReader.h
+            src/utils/FileReader.cpp
+            src/utils/XmlSection.h
+            src/utils/XmlParser.h
+            src/utils/XmlParser.cpp
+            src/qml.qrc
         )
 endif()
 
@@ -59,8 +59,8 @@ if(UNIX AND NOT APPLE)
     target_link_libraries(Yata PRIVATE  ${GTKMM_LIBRARIES} notifymm-1.0)
 endif()
 
-configure_file(data.xml ${CMAKE_CURRENT_BINARY_DIR}/data.xml COPYONLY)
-configure_file(schema.xsd ${CMAKE_CURRENT_BINARY_DIR}/schema.xsd COPYONLY)
+configure_file(data/data.xml ${CMAKE_CURRENT_BINARY_DIR}/data.xml COPYONLY)
+configure_file(data/schema.xsd ${CMAKE_CURRENT_BINARY_DIR}/schema.xsd COPYONLY)
 
 
 target_compile_definitions(Yata

@@ -2,17 +2,15 @@
  #include <libnotifymm.h>
 #endif
 
-#include "FileReader.h"
-#include "Task.h"
-#include "TasksListModel.h"
+#include "src/models/Task.h"
+#include "src/models/TasksListModel.h"
+#include "src/utils/FileReader.h"
 #include "utils/XmlParser.h"
 #include "utils/XmlSection.h"
 
 #include <QApplication>
 #include <QCommandLineParser>
-#include <QDebug>
 #include <QFileInfo>
-#include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QQuickStyle>
@@ -34,7 +32,7 @@ int main(int argc, char* argv[]) {
     app.setQuitOnLastWindowClosed(false);
 
     QQmlApplicationEngine engine;
-    const QUrl url(QStringLiteral("qrc:/main.qml"));
+    const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
 
     QObject::connect(
         &engine, &QQmlApplicationEngine::objectCreated, &app,
